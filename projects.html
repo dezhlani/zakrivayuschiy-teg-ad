@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Мои Проекты — DEZHLANI</title>
+    <style>
+      :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f4f4f9;
+        --text-primary: #1d1d1f;
+        --text-secondary: #6e6e73;
+        --accent: #0071e3;
+        --glass: rgba(255, 255, 255, 0.7);
+        --border: rgba(0, 0, 0, 0.1);
+      }
+
+      [data-theme='dark'] {
+        --bg-primary: #000000;
+        --bg-secondary: #1c1c1e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #86868b;
+        --accent: #0a84ff;
+        --glass: rgba(28, 28, 30, 0.7);
+        --border: rgba(255, 255, 255, 0.1);
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: -apple-system, system-ui, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        transition: 0.5s;
+        padding-top: 80px;
+      }
+
+      .nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        background: var(--glass);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav__logo { font-weight: 800; font-size: 1.2rem; }
+      .nav__links { display: flex; gap: 2rem; list-style: none; }
+      .nav__link { text-decoration: none; color: var(--text-primary); font-weight: 500; opacity: 0.7; }
+      .nav__link.active { opacity: 1; color: var(--accent); }
+
+      .section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem; }
+      
+      .project-card {
+        background: var(--bg-secondary);
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        transition: 0.4s;
+      }
+      .project-card:hover { transform: scale(1.02); border-color: var(--accent); }
+      
+      .project-card__img { width: 100%; aspect-ratio: 16/9; background: #ddd; object-fit: cover; }
+      .project-card__content { padding: 2rem; }
+      .project-card__tag { color: var(--accent); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+      
+      .theme-toggle { background: var(--bg-secondary); border: 1px solid var(--border); width: 50px; height: 26px; border-radius: 50px; cursor: pointer; padding: 4px; }
+      .theme-toggle__circle { width: 18px; height: 18px; background: var(--accent); border-radius: 50%; transition: 0.3s; }
+      [data-theme='dark'] .theme-toggle__circle { transform: translateX(24px); }
+    </style>
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="nav__logo">DEZHLANI</div>
+      <ul class="nav__links">
+        <li><a href="index.html" class="nav__link">Главная</a></li>
+        <li><a href="projects.html" class="nav__link active">Проекты</a></li>
+        <li><a href="about.html" class="nav__link">Обо мне</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-toggle__circle"></div>
+      </button>
+    </nav>
+
+    <main class="section">
+      <h1 style="font-size: 3rem; margin-bottom: 3rem;">Портфолио</h1>
+      <div class="grid">
+        <div class="project-card">
+          <img src="src/images/cards/1_start.webp" class="project-card__img" alt="Project">
+          <div class="project-card__content">
+            <span class="project-card__tag">Web Design</span>
+            <h3>Закрывающий тег</h3>
+            <p style="color: var(--text-secondary); margin-top: 1rem;">Первый серьезный проект на курсе веб-разработки.</p>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="src/images/cards/4_ideal.webp" class="project-card__img" alt="Project">
+          <div class="project-card__content">
+            <span class="project-card__tag">UI/UX</span>
+            <h3>Pixel Perfect</h3>
+            <p style="color: var(--text-secondary); margin-top: 1rem;">Исследование точности и эстетики в интерфейсах.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      function toggleTheme() {
+        const current = document.body.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      }
+      document.body.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    </script>
+  </body>
+</html>

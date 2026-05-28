@@ -3,344 +3,209 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Закрывающий тег — Личный Блог</title>
-    <link rel="icon" href="src/images/favicon.ico" sizes="any" />
-    <link rel="icon" href="src/svg/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="src/images/mobile-icon.png" />
+    <title>Web Journey — Главная</title>
+    <link rel="stylesheet" href="src/styles/main.css">
     <style>
       :root {
-        --bg-color: #f8f9fa;
-        --text-color: #1a1a1a;
-        --accent-color: #3b82f6;
-        --secondary-accent: #8b5cf6;
-        --card-bg: rgba(255, 255, 255, 0.7);
-        --card-border: rgba(0, 0, 0, 0.1);
-        --shadow-color: rgba(0, 0, 0, 0.05);
-        --glass-bg: rgba(255, 255, 255, 0.4);
-        --main-font: 'Inter', system-ui, -apple-system, sans-serif;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f4f4f9;
+        --text-primary: #1d1d1f;
+        --text-secondary: #6e6e73;
+        --accent: #0071e3;
+        --glass: rgba(255, 255, 255, 0.7);
+        --border: rgba(0, 0, 0, 0.1);
+        --card-shadow: 0 8px 32px rgba(0,0,0,0.05);
       }
 
       [data-theme='dark'] {
-        --bg-color: #0a0a0c;
-        --text-color: #e2e8f0;
-        --accent-color: #60a5fa;
-        --secondary-accent: #a78bfa;
-        --card-bg: rgba(30, 30, 35, 0.7);
-        --card-border: rgba(255, 255, 255, 0.1);
-        --shadow-color: rgba(0, 0, 0, 0.4);
-        --glass-bg: rgba(20, 20, 25, 0.4);
+        --bg-primary: #000000;
+        --bg-secondary: #1c1c1e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #86868b;
+        --accent: #0a84ff;
+        --glass: rgba(28, 28, 30, 0.7);
+        --border: rgba(255, 255, 255, 0.1);
+        --card-shadow: 0 8px 32px rgba(0,0,0,0.4);
       }
 
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      
+      * { margin: 0; padding: 0; box-sizing: border-box; }
       body {
-        font-family: var(--main-font);
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        line-height: 1.6;
-        transition: background-color 0.4s ease;
-        padding: 2rem;
-        min-height: 100vh;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-x: hidden;
       }
 
-      .page {
-        max-width: 1200px;
-        margin: 0 auto;
+      /* Custom Cursor */
+      .cursor {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--accent);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.1s ease;
+        display: none;
       }
 
-      .header {
+      @media (pointer: fine) { .cursor { display: block; } }
+
+      /* Navbar */
+      .nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        background: var(--glass);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 4rem 0;
+        border-bottom: 1px solid var(--border);
       }
 
-      .header__title {
-        font-size: clamp(2rem, 5vw, 4rem);
-        font-weight: 800;
-        line-height: 1;
-      }
+      .nav__logo { font-weight: 800; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+      .nav__links { display: flex; gap: 2rem; list-style: none; }
+      .nav__link { text-decoration: none; color: var(--text-primary); font-weight: 500; font-size: 0.9rem; opacity: 0.7; transition: 0.3s; }
+      .nav__link:hover, .nav__link.active { opacity: 1; color: var(--accent); }
 
-      .header__title-accent {
-        display: block;
-        font-size: 0.4em;
-        color: var(--accent-color);
-        margin-bottom: 0.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-      }
-
-      .theme-menu__list {
-        list-style: none;
-        display: flex;
-        gap: 0.5rem;
-        background: var(--glass-bg);
-        padding: 0.4rem;
-        border-radius: 100px;
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--card-border);
-      }
-
-      .theme-menu__button {
-        padding: 0.6rem 1.2rem;
-        border-radius: 100px;
-        border: none;
-        background: transparent;
-        color: var(--text-color);
+      /* Theme Toggle */
+      .theme-toggle {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        width: 50px;
+        height: 26px;
+        border-radius: 50px;
         cursor: pointer;
-        font-size: 0.8rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-      }
-
-      .theme-menu__button:disabled {
-        background: var(--accent-color);
-        color: white;
-      }
-
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-        gap: 2.5rem;
-        margin-top: 2rem;
-      }
-
-      .card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 24px;
-        overflow: hidden;
-        backdrop-filter: blur(12px);
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 30px var(--shadow-color);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .card:hover {
-        transform: translateY(-10px);
-      }
-
-      .card__header {
-        padding: 1.5rem 2rem;
-      }
-
-      .card__header h2 {
-        font-size: 1.4rem;
-        font-weight: 700;
-      }
-
-      .card__image-container {
         position: relative;
-        aspect-ratio: 16 / 10;
-        overflow: hidden;
+        padding: 4px;
       }
 
-      .card__image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      .theme-toggle__circle {
+        width: 18px;
+        height: 18px;
+        background: var(--accent);
+        border-radius: 50%;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .card__image-text {
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        background: rgba(0,0,0,0.6);
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 8px;
-        font-size: 0.7rem;
-        font-weight: 700;
-        backdrop-filter: blur(4px);
-      }
+      [data-theme='dark'] .theme-toggle__circle { transform: translateX(24px); }
 
-      .card__body {
-        padding: 2rem;
-        flex-grow: 1;
+      /* Hero */
+      .hero {
+        height: 100vh;
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
-      }
-
-      .card__buttons {
-        margin-top: auto;
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-
-      .standard-button {
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
-        border: none;
-        background: var(--accent-color);
-        color: white;
-        font-weight: 700;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .standard-button:hover {
-        filter: brightness(1.1);
-        transform: scale(1.02);
-      }
-
-      .card__icon-button {
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        border: 1px solid var(--card-border);
-        background: transparent;
-        display: flex;
-        align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
       }
 
-      .like-icon {
-        width: 22px;
-        height: 22px;
-        fill: none;
-        stroke: var(--text-color);
-        stroke-width: 2px;
-      }
+      .hero__title { font-size: clamp(3rem, 10vw, 8rem); font-weight: 900; line-height: 0.9; margin-bottom: 1.5rem; }
+      .hero__subtitle { font-size: 1.2rem; color: var(--text-secondary); max-width: 600px; }
 
-      .like-icon.is-liked {
-        fill: #ef4444;
-        stroke: #ef4444;
-      }
+      /* Sections */
+      .section { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; }
+      .section__title { font-size: 2.5rem; margin-bottom: 3rem; }
 
-      .footer {
-        padding: 6rem 0;
-        display: flex;
-        justify-content: center;
+      /* Cards */
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+      .card {
+        background: var(--bg-secondary);
+        border-radius: 24px;
+        padding: 2rem;
+        border: 1px solid var(--border);
+        transition: 0.4s;
+        text-decoration: none;
+        color: inherit;
+      }
+      .card:hover { transform: translateY(-10px); box-shadow: var(--card-shadow); border-color: var(--accent); }
+
+      /* Progress Bar */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: var(--accent);
+        z-index: 1001;
+        width: 0%;
       }
 
       @media (max-width: 768px) {
-        body { padding: 1rem; }
-        .header { flex-direction: column; gap: 2rem; text-align: center; }
-        .cards { grid-template-columns: 1fr; }
+        .nav__links { display: none; }
       }
     </style>
   </head>
-  <body class="page">
-    <header class="header">
-      <div class="header__logo">
-        <h1 class="header__title">
-          <span class="header__title-accent">Web Development</span>
-          Закрывающий тег
-        </h1>
-      </div>
-      <nav class="theme-menu">
-        <ul class="theme-menu__list">
-          <li><button type="button" data-theme="dark" class="theme-menu__button">Dark</button></li>
-          <li><button type="button" data-theme="auto" disabled class="theme-menu__button">Auto</button></li>
-          <li><button type="button" data-theme="light" class="theme-menu__button">Light</button></li>
-        </ul>
-      </nav>
+  <body>
+    <div class="cursor"></div>
+    <div class="progress"></div>
+
+    <nav class="nav">
+      <div class="nav__logo">DEZHLANI</div>
+      <ul class="nav__links">
+        <li><a href="index.html" class="nav__link active">Главная</a></li>
+        <li><a href="projects.html" class="nav__link">Проекты</a></li>
+        <li><a href="about.html" class="nav__link">Обо мне</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <div class="theme-toggle__circle"></div>
+      </button>
+    </nav>
+
+    <header class="hero">
+      <h1 class="hero__title">Creative<br>Developer</h1>
+      <p class="hero__subtitle">Создаю современные цифровые интерфейсы с упором на эстетику и производительность.</p>
     </header>
 
     <main>
-      <section class="cards">
-        <article class="card">
-          <header class="card__header">
-            <h2>Нулевой спринт: Старт</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Preparation</span>
-            <img class="card__image" src="src/images/cards/1_start.webp" alt="Start">
-          </div>
-          <div class="card__body">
-            <p>Первые шаги, настройка окружения и предвкушение большого пути в мире веба.</p>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="card__like-button standard-button">Like</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Чистый лист</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Design</span>
-            <img class="card__image" src="src/images/cards/2_clean_slate.webp" alt="Clean Slate">
-          </div>
-          <div class="card__body">
-            <p>Когда перед тобой только пустота, и ты создаешь свой первый интерфейс с нуля.</p>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="card__like-button standard-button">Like</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Трудности и баги</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Bugs</span>
-            <img class="card__image" src="src/images/cards/3_anxiety.webp" alt="Anxiety">
-          </div>
-          <div class="card__body">
-            <p>Бесконечные поиски ошибок и то самое чувство облегчения, когда всё заработало.</p>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="card__like-button standard-button">Like</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Идеальный пиксель</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Perfection</span>
-            <img class="card__image" src="src/images/cards/4_ideal.webp" alt="Ideal">
-          </div>
-          <div class="card__body">
-            <p>Стремление сделать идеально. Урок о том, что "сделано" лучше, чем "идеально".</p>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-              <button class="card__like-button standard-button">Like</button>
-            </div>
-          </div>
-        </article>
+      <section class="section">
+        <h2 class="section__title">Избранное</h2>
+        <div class="grid">
+          <a href="projects.html" class="card">
+            <h3>Проекты</h3>
+            <p>Взгляните на мои последние работы в вебе.</p>
+          </a>
+          <a href="about.html" class="card">
+            <h3>Обо мне</h3>
+            <p>Моя история, навыки и жизненный путь.</p>
+          </a>
+        </div>
       </section>
     </main>
 
-    <footer class="footer">
-      <button class="standard-button" style="padding: 1.5rem 3rem; font-size: 1.2rem;">Сохранить проект</button>
-    </footer>
-
-    <script src="src/scripts/set-theme.js"></script>
     <script>
-      const likeButtons = document.querySelectorAll('.card__like-button, .card__icon-button');
-      likeButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-          const card = this.closest('.card');
-          const heart = card.querySelector('.like-icon');
-          const textBtn = card.querySelector('.card__like-button');
-          heart.classList.toggle('is-liked');
-          textBtn.textContent = heart.classList.contains('is-liked') ? 'Unlike' : 'Like';
-        });
+      // Cursor Logic
+      const cursor = document.querySelector('.cursor');
+      document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
       });
+
+      // Progress Bar
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.querySelector('.progress').style.width = scrolled + "%";
+      });
+
+      // Theme Toggle Logic
+      function toggleTheme() {
+        const current = document.body.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      }
+
+      // Init Theme
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.body.setAttribute('data-theme', savedTheme);
     </script>
   </body>
 </html>
