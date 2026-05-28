@@ -5,31 +5,242 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Закрывающий тег — Личный Блог</title>
-    <link rel="stylesheet" href="src/styles/bundle.css" />
     <link rel="icon" href="src/images/favicon.ico" sizes="any" />
     <link rel="icon" href="src/svg/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="src/images/mobile-icon.png" />
-    <script src="src/scripts/set-theme.js"></script>
+    <style>
+      :root {
+        --bg-color: #f8f9fa;
+        --text-color: #1a1a1a;
+        --accent-color: #3b82f6;
+        --secondary-accent: #8b5cf6;
+        --card-bg: rgba(255, 255, 255, 0.7);
+        --card-border: rgba(0, 0, 0, 0.1);
+        --shadow-color: rgba(0, 0, 0, 0.05);
+        --glass-bg: rgba(255, 255, 255, 0.4);
+        --main-font: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+
+      [data-theme='dark'] {
+        --bg-color: #0a0a0c;
+        --text-color: #e2e8f0;
+        --accent-color: #60a5fa;
+        --secondary-accent: #a78bfa;
+        --card-bg: rgba(30, 30, 35, 0.7);
+        --card-border: rgba(255, 255, 255, 0.1);
+        --shadow-color: rgba(0, 0, 0, 0.4);
+        --glass-bg: rgba(20, 20, 25, 0.4);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      
+      body {
+        font-family: var(--main-font);
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        transition: background-color 0.4s ease;
+        padding: 2rem;
+        min-height: 100vh;
+      }
+
+      .page {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4rem 0;
+      }
+
+      .header__title {
+        font-size: clamp(2rem, 5vw, 4rem);
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .header__title-accent {
+        display: block;
+        font-size: 0.4em;
+        color: var(--accent-color);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .theme-menu__list {
+        list-style: none;
+        display: flex;
+        gap: 0.5rem;
+        background: var(--glass-bg);
+        padding: 0.4rem;
+        border-radius: 100px;
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--card-border);
+      }
+
+      .theme-menu__button {
+        padding: 0.6rem 1.2rem;
+        border-radius: 100px;
+        border: none;
+        background: transparent;
+        color: var(--text-color);
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+      }
+
+      .theme-menu__button:disabled {
+        background: var(--accent-color);
+        color: white;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2.5rem;
+        margin-top: 2rem;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 24px;
+        overflow: hidden;
+        backdrop-filter: blur(12px);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 30px var(--shadow-color);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+      }
+
+      .card__header {
+        padding: 1.5rem 2rem;
+      }
+
+      .card__header h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      .card__image-container {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+      }
+
+      .card__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .card__image-text {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        backdrop-filter: blur(4px);
+      }
+
+      .card__body {
+        padding: 2rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .card__buttons {
+        margin-top: auto;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .standard-button {
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        border: none;
+        background: var(--accent-color);
+        color: white;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .standard-button:hover {
+        filter: brightness(1.1);
+        transform: scale(1.02);
+      }
+
+      .card__icon-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: 1px solid var(--card-border);
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .like-icon {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: var(--text-color);
+        stroke-width: 2px;
+      }
+
+      .like-icon.is-liked {
+        fill: #ef4444;
+        stroke: #ef4444;
+      }
+
+      .footer {
+        padding: 6rem 0;
+        display: flex;
+        justify-content: center;
+      }
+
+      @media (max-width: 768px) {
+        body { padding: 1rem; }
+        .header { flex-direction: column; gap: 2rem; text-align: center; }
+        .cards { grid-template-columns: 1fr; }
+      }
+    </style>
   </head>
   <body class="page">
     <header class="header">
       <div class="header__logo">
         <h1 class="header__title">
-          <span class="header__title-accent">Web Journey</span>
+          <span class="header__title-accent">Web Development</span>
           Закрывающий тег
         </h1>
       </div>
-      <nav class="theme-menu header__theme-menu">
+      <nav class="theme-menu">
         <ul class="theme-menu__list">
-          <li class="theme-menu__item">
-            <button type="button" data-theme="dark" class="theme-menu__button">Dark</button>
-          </li>
-          <li class="theme-menu__item">
-            <button type="button" data-theme="auto" disabled class="theme-menu__button">Auto</button>
-          </li>
-          <li class="theme-menu__item">
-            <button type="button" data-theme="light" class="theme-menu__button">Light</button>
-          </li>
+          <li><button type="button" data-theme="dark" class="theme-menu__button">Dark</button></li>
+          <li><button type="button" data-theme="auto" disabled class="theme-menu__button">Auto</button></li>
+          <li><button type="button" data-theme="light" class="theme-menu__button">Light</button></li>
         </ul>
       </nav>
     </header>
@@ -38,25 +249,19 @@
       <section class="cards">
         <article class="card">
           <header class="card__header">
-            <h2>Начало: Нулевой спринт</h2>
+            <h2>Нулевой спринт: Старт</h2>
           </header>
           <div class="card__image-container">
             <span class="card__image-text">Preparation</span>
             <img class="card__image" src="src/images/cards/1_start.webp" alt="Start">
           </div>
           <div class="card__body">
-            <div class="card__text-container">
-              <p>Первые шаги в мире веб-разработки. Страх, любопытство и предвкушение чего-то большого.</p>
-            </div>
+            <p>Первые шаги, настройка окружения и предвкушение большого пути в мире веба.</p>
             <div class="card__buttons">
               <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
+                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
+              <button class="card__like-button standard-button">Like</button>
             </div>
           </div>
         </article>
@@ -66,172 +271,54 @@
             <h2>Чистый лист</h2>
           </header>
           <div class="card__image-container">
-            <span class="card__image-text">Creation</span>
+            <span class="card__image-text">Design</span>
             <img class="card__image" src="src/images/cards/2_clean_slate.webp" alt="Clean Slate">
           </div>
           <div class="card__body">
-            <div class="card__text-container">
-              <p>Когда перед тобой только пустота и бесконечные возможности кода.</p>
-            </div>
+            <p>Когда перед тобой только пустота, и ты создаешь свой первый интерфейс с нуля.</p>
             <div class="card__buttons">
               <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
+                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
+              <button class="card__like-button standard-button">Like</button>
             </div>
           </div>
         </article>
 
         <article class="card">
           <header class="card__header">
-            <h2>Страхи и сомнения</h2>
+            <h2>Трудности и баги</h2>
           </header>
           <div class="card__image-container">
-            <span class="card__image-text">Anxiety</span>
+            <span class="card__image-text">Bugs</span>
             <img class="card__image" src="src/images/cards/3_anxiety.webp" alt="Anxiety">
           </div>
           <div class="card__body">
-            <div class="card__text-container">
-              <p>А что, если не получится? Каждый баг кажется концом света, но это лишь часть пути.</p>
-            </div>
+            <p>Бесконечные поиски ошибок и то самое чувство облегчения, когда всё заработало.</p>
             <div class="card__buttons">
               <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
+                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
+              <button class="card__like-button standard-button">Like</button>
             </div>
           </div>
         </article>
 
         <article class="card">
           <header class="card__header">
-            <h2>Погоня за идеалом</h2>
+            <h2>Идеальный пиксель</h2>
           </header>
           <div class="card__image-container">
             <span class="card__image-text">Perfection</span>
             <img class="card__image" src="src/images/cards/4_ideal.webp" alt="Ideal">
           </div>
           <div class="card__body">
-            <div class="card__text-container">
-              <p>Стремление сделать каждый пиксель идеальным. Урок о том, когда нужно остановиться.</p>
-            </div>
+            <p>Стремление сделать идеально. Урок о том, что "сделано" лучше, чем "идеально".</p>
             <div class="card__buttons">
               <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
+                <svg class="like-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
               </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Поддержка рядом</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Community</span>
-            <img class="card__image" src="src/images/cards/5_care.webp" alt="Care">
-          </div>
-          <div class="card__body">
-            <div class="card__text-container">
-              <p>Ты не один. Сообщество, наставники и друзья, которые всегда помогут.</p>
-            </div>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-              </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Новый взгляд</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Perspective</span>
-            <img class="card__image" src="src/images/cards/6_another_angle.webp" alt="Another Angle">
-          </div>
-          <div class="card__body">
-            <div class="card__text-container">
-              <p>Когда решение находится там, где ты его совсем не ждал.</p>
-            </div>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-              </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Трудные моменты</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Focus</span>
-            <img class="card__image" src="src/images/cards/7_no_life.webp" alt="No Life">
-          </div>
-          <div class="card__body">
-            <div class="card__text-container">
-              <p>Учеба забирает всё время, но результат того стоит. Баланс — это искусство.</p>
-            </div>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-              </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <header class="card__header">
-            <h2>Сейчас я здесь</h2>
-          </header>
-          <div class="card__image-container">
-            <span class="card__image-text">Achievement</span>
-            <img class="card__image" src="src/images/cards/8_we_are_here.webp" alt="We Are Here">
-          </div>
-          <div class="card__body">
-            <div class="card__text-container">
-              <p>Финальная точка этого этапа. Гордость за пройденный путь и готовность к новым вызовам.</p>
-            </div>
-            <div class="card__buttons">
-              <button class="card__icon-button" aria-label="Like">
-                <svg class="like-icon" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-              </button>
-              <button class="card__like-button standard-button">
-                <span class="button__text">Like</span>
-              </button>
+              <button class="card__like-button standard-button">Like</button>
             </div>
           </div>
         </article>
@@ -239,28 +326,21 @@
     </main>
 
     <footer class="footer">
-      <button class="footer__button standard-button" type="button" onclick="window['dialog'].showModal()">
-        <svg class="footer__button-image" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke-width="2"/>
-          <path d="M17 21v-8H7v8M7 3v5h8" stroke-width="2"/>
-        </svg>
-        <span class="button__text">Сохранить проект</span>
-      </button>
+      <button class="standard-button" style="padding: 1.5rem 3rem; font-size: 1.2rem;">Сохранить проект</button>
     </footer>
 
-    <dialog class="dialog" id="dialog">
-      <form class="dialog__form" method="dialog">
-        <svg class="dialog__image" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" stroke-width="2"/>
-          <path d="M9 12l2 2 4-4" stroke-width="2"/>
-        </svg>
-        <p class="dialog__text">Проект успешно сохранен в вашу память!</p>
-        <button class="dialog__button standard-button" type="submit">
-          <span class="button__text">Понятно</span>
-        </button>
-      </form>
-    </dialog>
-
-    <script src="src/scripts/like.js"></script>
+    <script src="src/scripts/set-theme.js"></script>
+    <script>
+      const likeButtons = document.querySelectorAll('.card__like-button, .card__icon-button');
+      likeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const card = this.closest('.card');
+          const heart = card.querySelector('.like-icon');
+          const textBtn = card.querySelector('.card__like-button');
+          heart.classList.toggle('is-liked');
+          textBtn.textContent = heart.classList.contains('is-liked') ? 'Unlike' : 'Like';
+        });
+      });
+    </script>
   </body>
 </html>
