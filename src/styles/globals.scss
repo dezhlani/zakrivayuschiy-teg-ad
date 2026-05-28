@@ -1,39 +1,59 @@
 *,
-*::after,
-*::before {
+*::before,
+*::after {
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-ul,
-ol,
-li {
   margin: 0;
   padding: 0;
 }
 
-a {
-  color: inherit;
+html {
+  scroll-behavior: smooth;
 }
 
-button,
-input {
-  color: currentcolor;
+body {
+  font-family: var(--main-font);
+  font-weight: var(--main-font-weight);
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-speed) var(--transition-cubic);
+  overflow-x: hidden;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem;
+  }
+}
+
+h1, h2, h3 {
+  font-family: var(--accent-font);
+  font-weight: var(--accent-font-weight);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
   font-family: inherit;
-  font-size: inherit;
+  outline: none;
 }
 
-ul,
-ol {
-  list-style: none;
+img {
+  max-width: 100%;
+  display: block;
+  object-fit: cover;
 }
