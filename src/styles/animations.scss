@@ -1,0 +1,42 @@
+@import 'variables';
+
+@keyframes moving {
+  0% {
+    inset-inline-start: -20px;
+  }
+
+  100% {
+    inset-inline-start: -16px;
+  }
+}
+
+@keyframes core-coloring {
+  100% {
+    fill: var(--core-active-clr);
+  }
+}
+
+@keyframes main-body-coloring {
+  100% {
+    fill: var(--main-body-active-clr);
+  }
+}
+
+@keyframes contour-coloring {
+  100% {
+    fill: var(--contour-active-clr);
+  }
+}
+
+@keyframes icon-scaling {
+  100% {
+    transform: scale(1.5);
+    transform-origin: center;
+  }
+}
+
+@keyframes sparks-coloring {
+  100% {
+    fill: var(--sparks-fill-clr);
+  }
+}
